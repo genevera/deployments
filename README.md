@@ -18,6 +18,10 @@ Make sure your remote account has sudo access. If it require a sudo password, ma
 
 Make sure you download this collection using ansible-galaxy
 
+```bash
+ansible-galaxy collection install git+https://github.com/Haidra-Org/deployments
+```
+
 
 # Included Roles
 
