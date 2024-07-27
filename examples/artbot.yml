@@ -3,9 +3,9 @@
 - hosts: artbot_server
 
   roles:
-  - name: haidra.artbot
+  - name: haidra.deployments.artbot
     tags: artbot
-  - name: haidra.artbot_revproxy
+  - name: haidra.deployments.artbot_revproxy
     vars:
       artbot_domain: artbot.rocks
       artbot_server: 127.0.0.1
