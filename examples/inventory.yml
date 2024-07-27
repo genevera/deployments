@@ -1,0 +1,7 @@
+---
+
+all:
+  hosts:
+    artbot_server:
+      ansible_host: 10.0.0.1 # Put your artbot server IP here
+      ansible_become: true

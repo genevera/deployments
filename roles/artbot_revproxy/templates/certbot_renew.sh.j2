@@ -1,0 +1,6 @@
+set -e
+certbot certonly \
+--domains {{ artbot_domain }},{{ other_domains }} \
+--keep-until-expiring --http-01-port 60001 --agree-tos --standalone -n --expand
+cat /etc/letsencrypt/live/{{ artbot_domain }}/privkey.pem /etc/letsencrypt/live/{{ artbot_domain }}/fullchain.pem > /etc/haproxy/cert/{{ artbot_domain }}.pem
+systemctl reload haproxy

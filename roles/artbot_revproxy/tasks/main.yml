@@ -1,0 +1,96 @@
+- name: install dependencies
+  apt:
+    state: latest
+    update_cache: true
+    pkg:
+      - certbot
+      - haproxy
+      - python3-cryptography
+  tags:
+    - haproxy
+    - packages
+
+- name: Ensure haproxy config directory exists
+  file:
+    path: /etc/haproxy/cert
+    owner: root
+    group: root
+    state: directory
+  tags:
+  - haproxy
+
+- name: Generate an OpenSSL private key with the default values (4096 bits, RSA)
+  openssl_privatekey:
+    path: /etc/haproxy/cert/{{ artbot_domain }}.key
+  when: self_signed_cert
+  tags:
+  - haproxy
+
+- name: Generate a Self Signed OpenSSL certificate
+  openssl_certificate:
+    path: /etc/haproxy/cert/{{ artbot_domain }}.crt
+    privatekey_path: /etc/haproxy/cert/{{ artbot_domain }}.key
+    provider: selfsigned
+  when: self_signed_cert
+  tags:
+  - haproxy
+
+- name: Create merged certificate
+  shell: cat /etc/haproxy/cert/{{ artbot_domain }}.key /etc/haproxy/cert/{{ artbot_domain }}.crt > /etc/haproxy/cert/{{ artbot_domain }}.pem
+  when: self_signed_cert
+  tags:
+  - haproxy
+
+- name: Ensure certbot is configured for the domain {{ artbot_domain }}
+  command: > 
+    certbot certonly 
+    --domains {{ artbot_domain }},{{ other_domains }} 
+    --keep-until-expiring 
+    --agree-tos 
+    --standalone 
+    --http-01-port 60001 
+    --email {{ email }} 
+    --standalone 
+    -n --expand
+  tags: 
+  - cert
+  - haproxy
+  when: not self_signed_cert
+
+- name: Merge certbot certificates for {{ artbot_domain }}
+  shell: cat /etc/letsencrypt/live/{{ artbot_domain }}/privkey.pem /etc/letsencrypt/live/{{ artbot_domain }}/fullchain.pem > /etc/haproxy/cert/{{ artbot_domain }}.pem
+  tags: 
+  - cert
+  - haproxy
+  when: not self_signed_cert
+
+- name: Ensure Haproxy Configuration
+  template:
+    src: "{{ haproxy_cfg_template }}"
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: 0644
+    validate: /usr/sbin/haproxy -f %s -c
+  notify: reload haproxy
+  tags:
+  - haproxy
+
+- name: Ensure certificate renew script exists
+  template:
+    src: certbot_renew.sh.j2
+    dest: /root/certbot_renew.sh
+    owner: root
+    group: root
+    mode: '0744'
+  tags: haproxy
+
+- name: Add certificate renewal on cron
+  cron:
+    user: root
+    name: Renew Horde Certificate
+    special_time: daily
+    job: /root/certbot_renew.sh
+  tags: 
+  - haproxy
+  - cron
