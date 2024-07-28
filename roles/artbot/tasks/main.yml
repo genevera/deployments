@@ -74,6 +74,8 @@
   args:
      executable: /bin/bash
      chdir: /home/artbot/artbot
+  environment:
+    NO_BETA: "true"
   become_user: artbot
   when: git.changed is true
   tags: 
