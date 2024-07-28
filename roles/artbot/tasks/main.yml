@@ -68,7 +68,7 @@
   become_user: artbot
   tags: 
   - artbot_app
-  - update
+  - 9update
 
 - name: Build artbot
   shell: source /home/artbot/.nvm/nvm.sh && npm run build
@@ -100,7 +100,7 @@
     dest: /home/artbot/builds/{{ git.after }}
     owner: artbot
     group: artbot
-  when: git.changed is true
+  when: git.changed is true or force_build
   tags: 
   - artbot_app
   - update
@@ -111,7 +111,7 @@
     src: /home/artbot/builds/{{ git.after }}
     force: true
     state: link
-  when: git.changed is true
+  when: git.changed is true or force_build
   tags: 
   - artbot_app
   - update
@@ -122,7 +122,7 @@
      executable: /bin/bash
      chdir: /home/artbot/builds/latest
   become_user: artbot
-  when: git.changed is true
+  when: git.changed is true or force_build
   register: artbot_stop
   failed_when: 
   - artbot_stop.rc != 0
@@ -137,7 +137,7 @@
      executable: /bin/bash
      chdir: /home/artbot/builds/latest
   become_user: artbot
-  when: git.changed is true
+  when: git.changed is true or force_build
   tags: 
   - artbot_app
   - update
