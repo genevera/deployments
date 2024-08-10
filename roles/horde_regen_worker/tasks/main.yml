@@ -43,6 +43,25 @@
   tags: 
   - worker
 
+- name: Ensure update-runtime is run for AMD GPUs
+  shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/update-runtime-rocm.sh
+  args:
+     executable: /bin/bash
+     chdir: /home/{{ worker_username }}/{{ worker_clone_dir }}
+  when: 
+  - update_runtime is true
+  - amd_gpu is true
+
+- name: Ensure update-runtime is run for Nvidia GPUs
+  shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/update-runtime.sh
+  args:
+     executable: /bin/bash
+     chdir: /home/{{ worker_username }}/{{ worker_clone_dir }}
+  when: 
+  - update_runtime is true
+  - amd_gpu is false
+
+
 - name: Deploy bridgeData
   template:
     src: bridgeData.yaml.j2

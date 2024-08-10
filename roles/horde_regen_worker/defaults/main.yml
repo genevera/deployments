@@ -21,7 +21,10 @@ amd_gpu: false
 models_dir: regen_worker_models
 regen_worker_repo: https://github.com/Haidra-Org/horde-worker-regen
 regen_worker_repo_version: main
-
+# Set this to true to make the worker update the runtime manually the first time
+# useful if setting up multiple services using the same runtime, to avoid multiple
+# servicers trying to do it at the same time and deadlocking
+update_runtime: false
 
 ## BridgeData vars
 # The horde url
