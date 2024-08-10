@@ -4,11 +4,11 @@ After=network.target
 StartLimitIntervalSec=0
 
 [Service]
-WorkingDirectory=/home/db0/projects/{{ worker_runtime_dir }}
+WorkingDirectory=//home/{{ worker_username }}/{{ worker_runtime_dir }}
 {% if amd_gpu %}
-ExecStart=sh -c '/home/db0/projects/{{ worker_clone_dir }}/horde-bridge-rocm.sh'
+ExecStart=sh -c '/home/{{ worker_username }}/{{ worker_clone_dir }}/horde-bridge-rocm.sh'
 {% else %}
-ExecStart=sh -c '/home/db0/projects/{{ worker_clone_dir }}/horde-bridge.sh'
+ExecStart=sh -c '/home/{{ worker_username }}/{{ worker_clone_dir }}/horde-bridge.sh'
 {% endif %}
 Restart=always
 RestartSec=15
