@@ -9,10 +9,11 @@
 
 - name: Clone Horde github repository
   git:
-    repo: https://github.com/Haidra-Org/horde-worker-regen.git
+    repo: "{{ regen_worker_repo }}"
     dest: /home/{{ worker_username }}/{{ worker_clone_dir }}
     clone: yes
     update: yes
+    version: "{{ regen_worker_repo_version }}"
   tags: worker
 
   

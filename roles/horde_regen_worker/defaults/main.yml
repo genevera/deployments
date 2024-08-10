@@ -19,6 +19,8 @@ worker_service_name: ai_horde_worker
 amd_gpu: false
 # The directory to store the models. It will be place in the homedir of the owning user.
 models_dir: regen_worker_models
+regen_worker_repo: https://github.com/Haidra-Org/horde-worker-regen
+regen_worker_repo_version: main
 
 
 ## BridgeData vars
