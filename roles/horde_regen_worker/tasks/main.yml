@@ -49,7 +49,7 @@
      executable: /bin/bash
      chdir: /home/{{ worker_username }}/{{ worker_clone_dir }}
   when: 
-  - update_runtime is true
+  - initialize is true
   - amd_gpu is true
 
 - name: Ensure update-runtime is run for Nvidia GPUs
@@ -58,7 +58,25 @@
      executable: /bin/bash
      chdir: /home/{{ worker_username }}/{{ worker_clone_dir }}
   when: 
-  - update_runtime is true
+  - initialize is true
+  - amd_gpu is false
+
+- name: Ensure models are downloaded for the first time
+  shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/runtime-rocm.sh python -s /home/{{ worker_username }}/{{ worker_clone_dir }}/download_models.py
+  args:
+     executable: /bin/bash
+     chdir: /home/{{ worker_username }}/{{ worker_runtime_dir }}
+  when: 
+  - initialize is true
+  - amd_gpu is true
+
+- name: Ensure models are downloaded for the first time
+  shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/runtime.sh python -s /home/{{ worker_username }}/{{ worker_clone_dir }}/download_models.py
+  args:
+     executable: /bin/bash
+     chdir: /home/{{ worker_username }}/{{ worker_runtime_dir }}
+  when: 
+  - initialize is true
   - amd_gpu is false
 
 
