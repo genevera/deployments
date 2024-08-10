@@ -50,7 +50,9 @@ require_upfront_kudos: {{ require_upfront_kudos }}
 # You can get your civitai API Key from https://civitai.com/user/account (look for 'Add API Key')
 #
 # Remove the # from the line below and add your civitai API token to enable this feature.
-# civitai_api_token:
+{% if civitai_api_token is defined %}
+civitai_api_token: {{ civitai_api_token }}
+{% endif %}
 
 #######################################
 ## Dreamer (Stable Diffusion Worker) ##
