@@ -17,6 +17,9 @@ worker_runtime_dir: horde-worker-regen
 worker_service_name: ai_horde_worker
 # Set this to true when using an AMD GPU
 amd_gpu: false
+# The directory to store the models. It will be place in the homedir of the owning user.
+models_dir: regen_worker_models
+
 
 ## BridgeData vars
 # The horde url
@@ -148,7 +151,8 @@ stats_output_frequency: 30
 
 
 # The location in which stable diffusion ckpt models are stored
-cache_home: "./models/"
+# This is overriden by regen_worker_models above
+# cache_home: "./models/"
 
 # The models to use.
 # Instead of a model name you may use of any of the following magic constants:

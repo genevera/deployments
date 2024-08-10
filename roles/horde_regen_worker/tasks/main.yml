@@ -24,9 +24,18 @@
     recurse: true
   tags: worker
 
-- name: Ensure worker_runtime_dir {{ worker_runtime_dir }} exists.
+- name: Ensure worker_runtime_dir '{{ worker_runtime_dir }}' exists.
   file:
     path: /home/{{ worker_username }}/{{ worker_runtime_dir }}
+    owner: "{{ worker_username }}"
+    group: "{{ worker_username }}"
+    state: directory
+  tags: 
+  - worker
+
+- name: Ensure models_dir dir '{{ models_dir }}' exists.
+  file:
+    path: /home/{{ worker_username }}/{{ models_dir }}
     owner: "{{ worker_username }}"
     group: "{{ worker_username }}"
     state: directory

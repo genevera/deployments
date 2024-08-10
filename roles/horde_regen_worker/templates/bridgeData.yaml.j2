@@ -130,7 +130,7 @@ stats_output_frequency: {{ stats_output_frequency }}
 
 
 # The location in which stable diffusion ckpt models are stored
-cache_home: {{ cache_home }}
+cache_home: /home/{{ worker_username }}/{{ models_dir }}
 
 # Always download models when required without prompting
 always_download: true # Currently unused in regen
