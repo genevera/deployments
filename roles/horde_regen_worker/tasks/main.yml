@@ -95,7 +95,7 @@
   systemd:
     state: started
     daemon_reload: yes
-    name: ai_horde_worker
+    name: "{{ worker_service_name }}"
     enabled: True
     scope: user
   environment:
