@@ -5,7 +5,11 @@ StartLimitIntervalSec=0
 
 [Service]
 WorkingDirectory=/home/db0/projects/{{ worker_runtime_dir }}
+{% if amd_gpu %}
+ExecStart=sh -c '/home/db0/projects/{{ worker_clone_dir }}/horde-bridge-rocm.sh'
+{% else %}
 ExecStart=sh -c '/home/db0/projects/{{ worker_clone_dir }}/horde-bridge.sh'
+{% endif %}
 Restart=always
 RestartSec=15
 TimeoutStopSec=120

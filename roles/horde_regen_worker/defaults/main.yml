@@ -15,6 +15,8 @@ worker_runtime_dir: horde-worker-regen
 # The filename to use for the systemd service. Modify it to be different if you'll run more worker in the same server.
 # Ensure this is a valid filename
 worker_service_name: ai_horde_worker
+# Set this to true when using an AMD GPU
+amd_gpu: false
 
 ## BridgeData vars
 # The horde url
