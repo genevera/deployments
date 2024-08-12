@@ -44,6 +44,15 @@
   tags: 
   - worker
 
+- name: Ensure bin directory exists
+  file:
+    path: /home/{{ worker_username }}/{{ worker_clone_dir }}/bin
+    owner: "{{ worker_username }}"
+    group: "{{ worker_username }}"
+    state: directory
+  tags: 
+  - worker
+
 - name: Ensure models_dir dir '{{ models_dir }}' exists.
   file:
     path: /home/{{ worker_username }}/{{ models_dir }}
