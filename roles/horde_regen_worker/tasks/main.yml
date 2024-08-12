@@ -64,6 +64,7 @@
   - amd_gpu is true
   tags: 
   - worker
+  - initialize
 
 - name: Ensure update-runtime is run for Nvidia GPUs
   shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/update-runtime.sh
@@ -76,6 +77,7 @@
   - amd_gpu is false
   tags: 
   - worker
+  - initialize
 
 - name: Ensure models are downloaded for the first time
   shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/runtime-rocm.sh python -s /home/{{ worker_username }}/{{ worker_clone_dir }}/download_models.py
@@ -88,6 +90,7 @@
   - amd_gpu is true
   tags: 
   - worker
+  - initialize
 
 - name: Ensure models are downloaded for the first time
   shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/runtime.sh python -s /home/{{ worker_username }}/{{ worker_clone_dir }}/download_models.py
@@ -100,7 +103,7 @@
   - amd_gpu is false
   tags: 
   - worker
-
+  - initialize
 
 - name: Deploy bridgeData
   template:
