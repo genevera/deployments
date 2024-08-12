@@ -160,7 +160,7 @@
   getent:
     database: passwd
   tags: 
-  - horde
+  - worker
   - systemd
 
 - name: Ensure AI Worker service is started
