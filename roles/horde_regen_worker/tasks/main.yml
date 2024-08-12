@@ -44,24 +44,6 @@
   tags: 
   - worker
 
-- name: Ensure bin directory exists
-  file:
-    path: /home/{{ worker_username }}/{{ worker_clone_dir }}/bin
-    owner: "{{ worker_username }}"
-    group: "{{ worker_username }}"
-    state: directory
-  tags: 
-  - worker
-
-- name: Ensure micromamba directory exists
-  file:
-    path: /home/{{ worker_username }}/{{ worker_clone_dir }}/bin/micromamba
-    owner: "{{ worker_username }}"
-    group: "{{ worker_username }}"
-    state: directory
-  tags: 
-  - worker
-
 - name: Ensure models_dir dir '{{ models_dir }}' exists.
   file: 
     path: /home/{{ worker_username }}/{{ models_dir }}
@@ -73,6 +55,7 @@
 
 - name: Ensure update-runtime is run for AMD GPUs
   shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/update-runtime-rocm.sh
+  become: false
   args:
      executable: /bin/bash
      chdir: /home/{{ worker_username }}/{{ worker_clone_dir }}
@@ -84,6 +67,7 @@
 
 - name: Ensure update-runtime is run for Nvidia GPUs
   shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/update-runtime.sh
+  become: false
   args:
      executable: /bin/bash
      chdir: /home/{{ worker_username }}/{{ worker_clone_dir }}
@@ -95,6 +79,7 @@
 
 - name: Ensure models are downloaded for the first time
   shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/runtime-rocm.sh python -s /home/{{ worker_username }}/{{ worker_clone_dir }}/download_models.py
+  become: false
   args:
      executable: /bin/bash
      chdir: /home/{{ worker_username }}/{{ worker_runtime_dir }}
@@ -106,6 +91,7 @@
 
 - name: Ensure models are downloaded for the first time
   shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/runtime.sh python -s /home/{{ worker_username }}/{{ worker_clone_dir }}/download_models.py
+  become: false
   args:
      executable: /bin/bash
      chdir: /home/{{ worker_username }}/{{ worker_runtime_dir }}
