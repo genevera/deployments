@@ -6,6 +6,7 @@
     update_cache: true
     pkg:
       - git
+      - libjemalloc2
   tags:
     - packages
     - worker
