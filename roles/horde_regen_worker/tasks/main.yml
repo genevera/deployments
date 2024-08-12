@@ -1,5 +1,15 @@
 ---
 
+- name: install dependencies
+  apt:
+    state: latest
+    update_cache: true
+    pkg:
+      - git
+  tags:
+    - packages
+    - worker
+
 - name: Ensure {{ worker_username }} user exists
   user:
     name: "{{ worker_username }}"
