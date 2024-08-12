@@ -49,12 +49,12 @@
     path: /home/{{ worker_username }}/{{ worker_clone_dir }}/bin
     owner: "{{ worker_username }}"
     group: "{{ worker_username }}"
-    state: 
+    state: directory
   tags: 
   - worker
 
 - name: Ensure models_dir dir '{{ models_dir }}' exists.
-  file:directory
+  file: 
     path: /home/{{ worker_username }}/{{ models_dir }}
     owner: "{{ worker_username }}"
     group: "{{ worker_username }}"
