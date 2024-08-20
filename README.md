@@ -16,12 +16,13 @@ Make sure your local account can ssh to the various linux machines using ssh and
 
 Make sure your remote account has sudo access. If it require a sudo password, make sure you append `-K` to all `ansible-playbook` commands you see in the READMEs.
 
-Make sure you download this collection using ansible-galaxy
+Make sure you download this collection using ansible-galaxy. An example requirements.yml file has been provided.
 
 ```bash
-ansible-galaxy collection install git+https://github.com/Haidra-Org/deployments
+ansible-galaxy collection install -r examples/requirements.yml
 ```
 
+Alternatively you can use the provided requir
 
 # Included Roles
 
