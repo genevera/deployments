@@ -6,7 +6,8 @@ version: "0.2.0"
 readme: "README.md"
 authors:
     - Divided by Zer0 <mail@dbzer0.com>
-dependencies: {}
+dependencies: 
+    geerlingguy.swap: "*"
 license:
     - "MIT"
 tags:
