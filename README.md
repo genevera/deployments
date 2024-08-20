@@ -19,7 +19,8 @@ Make sure your remote account has sudo access. If it require a sudo password, ma
 Make sure you download this collection using ansible-galaxy. An example requirements.yml file has been provided.
 
 ```bash
-ansible-galaxy collection install -r examples/requirements.yml
+wget https://raw.githubusercontent.com/Haidra-Org/deployments/main/examples/requirements.yml
+ansible-galaxy collection install -r requirements.yml
 ```
 
 Alternatively you can use the provided requir
