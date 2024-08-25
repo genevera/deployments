@@ -15,6 +15,10 @@
   user:
     name: "{{ worker_username }}"
     shell: /bin/bash
+    groups: 
+    - video
+    - render
+    append: true
   tags: worker
 
 
