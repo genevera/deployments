@@ -21,6 +21,25 @@
     append: true
   tags: worker
 
+- name: Gather list of users
+  command: ls /home
+  register: users_list
+
+- name: Disable existing service if active
+  become: true
+  block:
+    - name: Check if service is active for user
+      command: >
+        sudo -u {{ item }} XDG_RUNTIME_DIR=/run/user/$(id -u {{ item }}) systemctl --user is-active {{ worker_service_name }}
+      register: service_status
+      ignore_errors: true
+      changed_when: false
+
+    - name: Disable service for user if active
+      command: >
+        sudo -u {{ item }} XDG_RUNTIME_DIR=/run/user/$(id -u {{ item }}) systemctl --user disable --now {{ worker_service_name }}
+      when: service_status.rc == 0
+  loop: "{{ users_list.stdout_lines }}"
 
 - name: Clone Horde github repository
   git:
