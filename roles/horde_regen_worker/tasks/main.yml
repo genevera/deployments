@@ -29,6 +29,7 @@
     clone: yes
     update: yes
     version: "{{ regen_worker_repo_version }}"
+  notify: Restart AI Worker service
   tags: worker
 
   
@@ -65,6 +66,7 @@
     owner: "{{ worker_username }}"
     group: "{{ worker_username }}"
     mode: '0644'
+  notify: Restart AI Worker service
   tags: 
   - worker
 
@@ -138,6 +140,7 @@
     owner: "{{ worker_username }}"
     group: "{{ worker_username }}"
     mode: '0644'
+  notify: Restart AI Worker service
   tags: 
   - worker
   - systemd
@@ -178,6 +181,7 @@
   environment:
     XDG_RUNTIME_DIR: "/run/user/{{ getent_passwd[worker_username].1 }}"
   become_user: "{{ worker_username }}"
+  regiser: service_started
   tags: 
   - worker
   - systemd
