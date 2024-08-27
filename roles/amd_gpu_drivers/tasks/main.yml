@@ -1,0 +1,43 @@
+---
+
+
+- name: Ensure rocm gpg key is available
+  ansible.builtin.apt_key:
+    url: http://repo.radeon.com/rocm/rocm.gpg.key
+    state: present
+
+- name: Ensure rocm repository is available
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64] http://repo.radeon.com/rocm/apt/5.0 ubuntu main
+    state: present
+
+- name: Ensure rocm packages are installed
+  apt:
+    state: latest
+    update_cache: true
+    pkg:
+      - software-properties-common
+      - wget 
+      - gnupg2 
+      - curl 
+      - ca-certificates 
+      - lsb-release
+      - rocm-dkms 
+      - rocm-dev 
+      - rocm-utils 
+      - rocminfo 
+      - rocm-device-libs
+  tags:
+    - packages
+    - rocm
+
+- name: Ensure ROCm Libraries exist in Loader Path
+  lineinfile:
+    dest: /etc/ld.so.conf.d/rocm.conf
+    line: "{{ item }}"
+  loop:
+    - /opt/rocm/lib
+    - /opt/rocm/lib64
+
+- name: Run ldconfig
+  shell: ldconfig
