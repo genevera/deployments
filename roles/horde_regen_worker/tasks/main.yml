@@ -181,7 +181,7 @@
   environment:
     XDG_RUNTIME_DIR: "/run/user/{{ getent_passwd[worker_username].1 }}"
   become_user: "{{ worker_username }}"
-  regiser: service_started
+  register: service_started
   tags: 
   - worker
   - systemd
