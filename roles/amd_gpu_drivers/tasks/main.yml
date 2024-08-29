@@ -1,7 +1,7 @@
 ---
 
 
-- name: Ensure rocm packages are installed
+- name: Ensure kernel packages are installed
   apt:
     state: latest
     update_cache: true
@@ -49,6 +49,7 @@
   lineinfile:
     dest: /etc/ld.so.conf.d/rocm.conf
     line: "{{ item }}"
+    create: true
   loop:
     - /opt/rocm/lib
     - /opt/rocm/lib64
