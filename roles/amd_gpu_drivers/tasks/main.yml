@@ -1,34 +1,48 @@
 ---
 
 
-- name: Ensure rocm gpg key is available
-  ansible.builtin.apt_key:
-    url: http://repo.radeon.com/rocm/rocm.gpg.key
-    state: present
+- name: Ensure rocm packages are installed
+  apt:
+    state: latest
+    update_cache: true
+    pkg:
+      - "linux-headers-{{ ansible_kernel }}" 
+      - "linux-modules-extra-{{ ansible_kernel }}"
+  notify: Reboot the server
+  tags:
+    - packages
+    - rocm
 
-- name: Ensure rocm repository is available
-  ansible.builtin.apt_repository:
-    repo: deb [arch=amd64] http://repo.radeon.com/rocm/apt/5.0 ubuntu main
-    state: present
+
+- name: Ensure {{ ansible_user_id }} is in the right groups
+  user:
+    name: "{{ ansible_user_id }}"
+    groups: 
+    - video
+    - render
+    append: true
+  tags: rocm
+
+
+- name: Ensure the relevant deb package is installed
+  ansible.builtin.apt:
+    deb: https://repo.radeon.com/amdgpu-install/6.2/ubuntu/jammy/amdgpu-install_6.2.60200-1_all.deb
 
 - name: Ensure rocm packages are installed
   apt:
     state: latest
     update_cache: true
     pkg:
-      - software-properties-common
-      - wget 
-      - gnupg2 
-      - curl 
-      - ca-certificates 
-      - lsb-release
-      - rocm-dkms 
-      - rocm-dev 
-      - rocm-utils 
-      - rocminfo 
-      - rocm-device-libs
+      - amdgpu-dkms
+      - rocm
+  notify: Reboot the server
   tags:
     - packages
+    - rocm
+
+- name: Force all notified handlers to run at this point.
+  ansible.builtin.meta: flush_handlers
+  tags:
     - rocm
 
 - name: Ensure ROCm Libraries exist in Loader Path
@@ -38,6 +52,42 @@
   loop:
     - /opt/rocm/lib
     - /opt/rocm/lib64
+  tags:
+    - rocm
 
 - name: Run ldconfig
   shell: ldconfig
+  tags:
+    - rocm
+
+- name: Install amdgpu-fan python package
+  ansible.builtin.pip:
+    name: amdgpu-fan
+  tags:
+    - packages
+    - amdfan
+
+
+- name: Ensure /etc/amdgpu-fan.yml exists
+  file:
+    path: /etc/amdgpu-fan.yml
+    state: touch
+  tags:
+    - amdfan
+
+- name: Ensure amdfan-gpu is configured 
+  copy:
+    src: amdgpu-fan.service.ini
+    dest: /etc/systemd/system/amdgpu-fan.service
+  tags:
+    - amdfan
+
+- name: Ensure amdgpu-fan service is started
+  systemd:
+    state: started
+    daemon_reload: yes
+    name: amdgpu-fan
+    enabled: True
+  tags: 
+  - amdfan
+  - systemd

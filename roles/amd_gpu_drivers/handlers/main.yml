@@ -1,2 +1,4 @@
 ---
 
+- name: Reboot the server
+  ansible.builtin.reboot:

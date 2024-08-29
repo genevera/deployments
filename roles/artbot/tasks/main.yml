@@ -132,7 +132,7 @@
   - update
 
 - name: Ensure artbot is started
-  shell: source /home/artbot/.nvm/nvm.sh && pm2 start ecosystem.config.js && pm2 save
+  shell: source /home/artbot/.nvm/nvm.sh && pm2 start ecosystem.config.js --only artbot && pm2 save
   args:
      executable: /bin/bash
      chdir: /home/artbot/builds/latest
