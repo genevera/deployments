@@ -71,11 +71,12 @@
   - worker
 
 - name: Ensure update-runtime is run for AMD GPUs
-  shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/update-runtime-rocm.sh
+  shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/update-runtime-rocm.sh 
   become_user: "{{ worker_username }}"
   args:
      executable: /bin/bash
      chdir: /home/{{ worker_username }}/{{ worker_clone_dir }}
+  register: update_runtime  
   when: 
   - initialize is true
   - amd_gpu is true
@@ -89,12 +90,23 @@
   args:
      executable: /bin/bash
      chdir: /home/{{ worker_username }}/{{ worker_clone_dir }}
+  register: update_runtime  
   when: 
   - initialize is true
   - amd_gpu is false
   tags: 
   - worker
   - initialize
+
+- name: Show update_runtime output
+  debug:
+    var: update_runtime
+  when: 
+  - initialize is true
+  tags: 
+  - worker
+  - initialize
+  - debug
 
 - name: Ensure models are downloaded for the first time
   shell: /home/{{ worker_username }}/{{ worker_clone_dir }}/runtime-rocm.sh python -s /home/{{ worker_username }}/{{ worker_clone_dir }}/download_models.py
