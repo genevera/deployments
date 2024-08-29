@@ -14,9 +14,9 @@
     - rocm
 
 
-- name: Ensure {{ ansible_user_id }} is in the right groups
+- name: Ensure {{ ansible_user }} is in the right groups
   user:
-    name: "{{ ansible_user_id }}"
+    name: "{{ ansible_user }}"
     groups: 
     - video
     - render
